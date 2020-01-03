@@ -1,7 +1,7 @@
 from bayes_opt import BayesianOptimization
 import numpy as np
 from time import clock
-from CostFunction import cost_func
+from .CostFunction import cost_func
 
 def tune():
 	"""Tunes hyperparameters of a feed forward net using Bayesian Optimization.
