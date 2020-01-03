@@ -15,7 +15,7 @@ def cost_func(params):
 	n_layers = int(params[0])
 	n_hidden = int(params[1])
 	do_rate = params[2]
-	nonlin = theano.tensor.nnet.relu if params[3] > .5 else np.tanh
+	nonlin = theano.tensor.nnet.relu if params[3] > .5 else npexit.tanh
 	lambda1 = params[4]
 	lambda2 = params[5]
 
