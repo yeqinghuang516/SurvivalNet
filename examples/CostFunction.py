@@ -4,7 +4,7 @@ import numpy as np
 import scipy.io as sio
 from survivalnet.optimization import SurvivalAnalysis
 import theano
-import cPickle
+import pickle as cPickle
 
 LEARNING_RATE = 0.001
 EPOCHS = 40
@@ -40,11 +40,11 @@ def cost_func(params):
 			non_lin=nonlin, optim=OPTIM, verbose=False, earlystp=False)
 	
 	if not val_costs or np.isnan(val_costs[-1]):
-		print 'Skipping due to NAN'
+		print('Skipping due to NAN')
 		return 1 
 	
 	return (1 - val_cindices[maxIter])
 
 if __name__ == '__main__':
 	res = cost_func([1.0, 38.0, 0.3, 0.4, 0.00004, 0.00004])
-	print res
+	print(res)

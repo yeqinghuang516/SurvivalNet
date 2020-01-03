@@ -76,7 +76,7 @@ class Model(object):
 			self.risk_layer = RiskLayer(input=self.x, n_in=n_ins, n_out=n_outs, rng = numpy_rng)
 		else:    
 			# Constructs the intermediate layers.
-			for i in xrange(self.n_layers):     
+			for i in range(self.n_layers):     
 				if i == 0:
 					input_size = n_ins
 					layer_input = self.x

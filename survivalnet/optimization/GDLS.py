@@ -64,7 +64,7 @@ class GDLS(object):
                  _line_search_wolfe12(f, fprime, self.theta_t, self.rho_t, self.gf_t,
                                       self.old_fval, self.old_old_fval, amin=1e-100, amax=1e100)
         except _LineSearchError:
-            print 'Line search failed to find a better solution.\n'         
+            print('Line search failed to find a better solution.\n')         
             self.stop = True
             theta_next = self.theta_t + self.gf_t * .00001 
             return theta_next

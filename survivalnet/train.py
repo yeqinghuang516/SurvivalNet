@@ -4,11 +4,11 @@ import sys
 import theano
 import timeit
 
-from model import Model
-from optimization import BFGS
-from optimization import GDLS
-from optimization import SurvivalAnalysis 
-from optimization import isOverfitting
+from .model import Model
+from .optimization import BFGS
+from .optimization import GDLS
+from .optimization import SurvivalAnalysis 
+from .optimization import isOverfitting
 
 LEARNING_RATE_DECAY = 1 
 
@@ -76,18 +76,18 @@ def train(pretrain_set, train_set, test_set, pretrain_config, finetune_config,
 		start_time = timeit.default_timer()
 		# de-noising level
 		corruption_levels = [pretrain_config['corruption_level']] * n_layers
-		for i in xrange(model.n_layers):            #Layerwise pre-training
+		for i in range(model.n_layers):            #Layerwise pre-training
 			# go through pretraining epochs
-			for epoch in xrange(pretrain_config['pt_epochs']):
+			for epoch in range(pretrain_config['pt_epochs']):
 				# go through the training set
 				c = []
-				for batch_index in xrange(n_batches):
+				for batch_index in range(n_batches):
 					c.append(pretraining_fns[i](index=batch_index,
 						corruption=corruption_levels[i],
 						lr=pretrain_config['pt_lr']))
 
 					if verbose: 
-						print 'Pre-training layer {}, epoch {}, cost'.format(i, epoch, numpy.mean(c))
+						print('Pre-training layer {}, epoch {}, cost'.format(i, epoch, numpy.mean(c)))
 
 		end_time = timeit.default_timer()
 		if verbose: 
@@ -155,7 +155,7 @@ def train(pretrain_set, train_set, test_set, pretrain_config, finetune_config,
 										   test_cost, test_ci))
 		if earlystp and epoch >= 15 and (epoch % 5 == 0):
 			if verbose:
-				print 'Checking overfitting!'
+				print('Checking overfitting!')
 			check, max_iter = isOverfitting(numpy.asarray(test_cindices))
 			if check:                
 				print(('Training Stopped Due to Overfitting! cindex = {},'
@@ -170,5 +170,5 @@ def train(pretrain_set, train_set, test_set, pretrain_config, finetune_config,
 		epoch += 1
 		if numpy.isnan(test_cost): break 
 	if verbose: 
-		print 'C-index score after {} epochs is: {}'.format(max_iter, max(test_cindices))
+		print('C-index score after {} epochs is: {}'.format(max_iter, max(test_cindices)))
 	return train_costs, train_cindices, test_costs, test_cindices, train_risk, test_risk, model, max_iter

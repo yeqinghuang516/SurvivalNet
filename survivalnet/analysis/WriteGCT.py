@@ -34,7 +34,7 @@ def WriteGCT(Genes, Samples, Scores, File):
     try:
         Gct = open(File, 'w')
     except IOError:
-        print "Cannot create file ", File
+        print("Cannot create file ", File)
 
     # write leading rows
     Gct.write('#1.2\n')

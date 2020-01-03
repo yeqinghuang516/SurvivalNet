@@ -1,4 +1,4 @@
-import bayesopt
+from bayes_opt import BayesianOptimization
 import numpy as np
 from time import clock
 from CostFunction import cost_func
@@ -15,14 +15,19 @@ def tune():
 	params['n_iter_relearn'] = 1
 	params['n_init_samples'] = 2
 
-	print "*** Model Selection with BayesOpt ***"
+	print("*** Model Selection with BayesOpt ***")
 	n = 6  # n dimensions
 	# params: #layer, width, dropout, nonlinearity, l1_rate, l2_rate
 	lb = np.array([1 , 10 , 0., 0., 0., 0.])
 	ub = np.array([10, 500, 1., 1., 0., 0.])
 
 	start = clock()
-	mvalue, x_out, _ = bayesopt.optimize(cost_func, n, lb, ub, params)
+	optimizer = BayesianOptimization(f=-cost_func, pbounds=[(1, 10), (10, 500), (0, 1), (0, 0), (0, 0), (0, 0)])
+	optimizer.maximize(n_iter=50, init_points=2)
+	res = optimizer.res
+
+
+	# mvalue, x_out, _ = bayesopt.optimize(cost_func, n, lb, ub, params)
 
 	# Usage of BayesOpt with discrete set of values for hyper-parameters.
 
@@ -32,9 +37,10 @@ def tune():
 	#x_set = np.array([[layers, hsizes, drates], dtype=float).transpose()
 	#mvalue, x_out, _ = bayesopt.optimize_discrete(cost_func, x_set, params)
 
-	print "Result", mvalue, "at", x_out
-	print "Running time:", clock() - start, "seconds"
-	return mvalue, x_out
+	# print("Result", mvalue, "at", x_out)
+	print(res)
+	print("Running time:", clock() - start, "seconds")
+	return res['target'], res['params']
 
 
 if __name__=='__main__':

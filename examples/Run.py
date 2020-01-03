@@ -7,7 +7,7 @@ from survivalnet.optimization import SurvivalAnalysis
 import numpy as np
 from survivalnet.train import train
 import theano
-import cPickle
+import pickle as cPickle
 
 N_SHUFFLES = 20
 
@@ -81,13 +81,13 @@ def Run(input_path, output_path, do_bayes_opt, feature_key, epochs):
 				O[fold_size:2*fold_size]);
 
 		# Writes data sets for bayesopt cost function's use.
-		with file('train_set', 'wb') as f:
+		with open('train_set', 'wb') as f:
 			cPickle.dump(train_set, f, protocol=cPickle.HIGHEST_PROTOCOL)
-		with file('val_set', 'wb') as f:
+		with open('val_set', 'wb') as f:
 			cPickle.dump(val_set, f, protocol=cPickle.HIGHEST_PROTOCOL)
 
 		if do_bayes_opt == True:
-			print '***Model Selection with BayesOpt for shuffle', str(i), '***'
+			print ('***Model Selection with BayesOpt for shuffle', str(i), '***')
 			_, bo_params = BayesOpt.tune()
 			n_layers = int(bo_params[0])
 			n_hidden = int(bo_params[1])
@@ -109,16 +109,16 @@ def Run(input_path, output_path, do_bayes_opt, feature_key, epochs):
 
 		finetune_config = {'ft_lr':0.0001, 'ft_epochs':epochs}
 
-		print '*** Model Assesment ***'
+		print('*** Model Assesment ***')
 		_, train_cindices, _, test_cindices, _, _, model, _ = train(pretrain_set,
 				train_set, test_set, pretrain_config, finetune_config, n_layers,
 				n_hidden, dropout_rate=do_rate, lambda1=lambda1, lambda2=lambda2, 
 				non_lin=nonlin, optim=opt, verbose=True, earlystp=False)
 		cindex_results.append(test_cindices[-1])
 		avg_cost += test_cindices[-1]
-		print expID , ' ',   test_cindices[-1],  'average = ',avg_cost/(i+1)
-		print np.mean(cindex_results), np.std(cindex_results)
-		with file(os.path.join(output_path, 'final_model'), 'wb') as f:
+		print(expID , ' ',   test_cindices[-1],  'average = ',avg_cost/(i+1))
+		print(np.mean(cindex_results), np.std(cindex_results))
+		with open(os.path.join(output_path, 'final_model'), 'wb') as f:
 			cPickle.dump(model, f, protocol=cPickle.HIGHEST_PROTOCOL)
 	
 	outputFileName = os.path.join(output_path, 'c_index_list.mat')
