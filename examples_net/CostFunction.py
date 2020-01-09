@@ -11,13 +11,10 @@ EPOCHS = 40
 OPTIM = 'GDLS'
 
 
-def cost_func(params):
-	n_layers = int(params[0])
-	n_hidden = int(params[1])
-	do_rate = params[2]
-	nonlin = theano.tensor.nnet.relu if params[3] > .5 else npexit.tanh
-	lambda1 = params[4]
-	lambda2 = params[5]
+def cost_func(n_layers, n_hidden, do_rate, nonlin, lambda1, lambda2):
+	n_layers = int(n_layers)
+	n_hidden = int(n_hidden)
+	nonlin = theano.tensor.nnet.relu if nonlin > .5 else np.tanh
 
 	# Loads data sets saved by the Run.py module.
 	with open('train_set', 'rb') as f:

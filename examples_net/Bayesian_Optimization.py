@@ -16,13 +16,14 @@ def tune():
 	params['n_init_samples'] = 2
 
 	print("*** Model Selection with BayesOpt ***")
-	n = 6  # n dimensions
+	# n = 6  # n dimensions
 	# params: #layer, width, dropout, nonlinearity, l1_rate, l2_rate
-	lb = np.array([1 , 10 , 0., 0., 0., 0.])
-	ub = np.array([10, 500, 1., 1., 0., 0.])
+	# lb = np.array([1 , 10 , 0., 0., 0., 0.])
+	# ub = np.array([10, 500, 1., 1., 0., 0.])
 
 	start = clock()
-	optimizer = BayesianOptimization(f=-cost_func, pbounds=[(1, 10), (10, 500), (0, 1), (0, 0), (0, 0), (0, 0)])
+	optimizer = BayesianOptimization(f=cost_func, 
+	pbounds={'n_layers': (1, 10), 'n_hidden': (10, 500), 'do_rate': (0, 1), 'nonlin': (0, 1), 'lambda1': (0, 0), 'lambda2': (0, 0)})
 	optimizer.maximize(n_iter=50, init_points=2)
 	res = optimizer.res
 
